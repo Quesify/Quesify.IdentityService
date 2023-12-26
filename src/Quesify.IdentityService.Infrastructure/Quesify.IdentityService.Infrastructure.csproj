@@ -10,11 +10,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-    <PackageReference Include="Quesify.SharedKernel.EventBus.Kafka" Version="1.0.2" />
-    <PackageReference Include="Quesify.SharedKernel.Guids" Version="1.0.2" />
-    <PackageReference Include="Quesify.SharedKernel.Json.Newtonsoft" Version="1.0.2" />
-    <PackageReference Include="Quesify.SharedKernel.Security" Version="1.0.2" />
-    <PackageReference Include="Quesify.SharedKernel.TimeProviders" Version="1.0.2" />
+    <PackageReference Include="Quesify.SharedKernel.EventBus.Kafka" Version="1.0.3" />
+    <PackageReference Include="Quesify.SharedKernel.Guids" Version="1.0.3" />
+    <PackageReference Include="Quesify.SharedKernel.Json.Newtonsoft" Version="1.0.3" />
+    <PackageReference Include="Quesify.SharedKernel.Security" Version="1.0.3" />
+    <PackageReference Include="Quesify.SharedKernel.TimeProviders" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
