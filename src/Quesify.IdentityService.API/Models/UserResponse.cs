@@ -4,6 +4,8 @@ public class UserResponse
 {
     public string UserName { get; set; }
 
+    public int Score { get; set; }
+
     public string? About { get; set; }
 
     public string? Location { get; set; }

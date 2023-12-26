@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Quesify.IdentityService.API.IntegrationEvents.EventHandlers;
 using Quesify.SharedKernel.AspNetCore.Swagger.Filters;
 using Quesify.SharedKernel.Utilities.Guards;
 using Serilog;
@@ -50,6 +51,9 @@ public static class DependencyInjection
         services.AddHttpContextCurrentPrincipalAccessor();
 
         services.AddCustomExceptionHandler();
+
+        services.AddTransient<QuestionVotedIntegrationEventHandler>();
+        services.AddTransient<AnswerVotedIntegrationEventHandler>();
 
         return services;
     }
