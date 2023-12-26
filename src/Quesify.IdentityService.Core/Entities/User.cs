@@ -4,6 +4,8 @@ namespace Quesify.IdentityService.Core.Entities;
 
 public class User : IdentityUser<Guid>
 {
+    public int Score { get; set; }
+
     public string? About { get; set; }
 
     public string? Location { get; set; }
