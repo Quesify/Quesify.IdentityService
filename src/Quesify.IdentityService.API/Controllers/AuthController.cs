@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Quesify.IdentityService.API.IntegrationEvents.Events;
 using Quesify.IdentityService.API.Models;
 using Quesify.IdentityService.Core.Constants;
 using Quesify.IdentityService.Core.Entities;
 using Quesify.SharedKernel.AspNetCore.Controllers;
+using Quesify.SharedKernel.AspNetCore.Filters;
+using Quesify.SharedKernel.EventBus.Abstractions;
+using Quesify.SharedKernel.Guids;
 using Quesify.SharedKernel.Security.Tokens;
-using Quesify.SharedKernel.Security.Users;
 using Quesify.SharedKernel.Utilities.Exceptions;
 using Quesify.SharedKernel.Utilities.TimeProviders;
 using System.Text;
@@ -21,6 +24,8 @@ public class AuthController : BaseController
     private readonly SignInManager<User> _signInManager;
     private readonly ITokenService _tokenService;
     private readonly IDateTime _dateTime;
+    private readonly IGuidGenerator _guidGenerator;
+    private readonly IEventBus _eventBus;
     private readonly ILogger<AuthController> _logger;
 
     public AuthController(
@@ -28,12 +33,16 @@ public class AuthController : BaseController
         SignInManager<User> signInManager,
         ITokenService tokenService,
         IDateTime dateTime,
+        IGuidGenerator guidGenerator,
+        IEventBus eventBus,
         ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
         _dateTime = dateTime;
+        _guidGenerator = guidGenerator;
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -68,6 +77,7 @@ public class AuthController : BaseController
 
 
     [HttpPost("register")]
+    [Transaction]
     public async Task<IActionResult> RegisterAsync(UserForRegisterRequest request)
     {
         var user = new User()
@@ -99,6 +109,10 @@ public class AuthController : BaseController
             var callbackUrl = $"localhost:6000/users/confirm-email/{userId}/{code}";
             //TODO: Send mail
         }
+
+        await _eventBus.PublishAsync(
+            new UserCreatedIntegrationEvent(
+                user.Id, user.UserName, _guidGenerator.Generate(), _dateTime.Now));
 
         return CreatedResponse(null, UserForRegisterResponse.Succees());
     }

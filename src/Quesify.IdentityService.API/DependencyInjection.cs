@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Quesify.IdentityService.API.IntegrationEvents.EventHandlers;
 using Quesify.SharedKernel.AspNetCore.Swagger.Filters;
 using Quesify.SharedKernel.Utilities.Guards;
@@ -20,10 +21,11 @@ public static class DependencyInjection
 
         services.AddControllers();
 
-        services.AddSwaggerGen(o =>
+        services.AddSwaggerGen(options =>
         {
-            o.SwaggerDoc("v1", new OpenApiInfo { Title = "Quesify.IdentityService.API", Version = "v1" });
-            o.DocumentFilter<LowercaseDocumentFilter>();
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Quesify.IdentityService.API", Version = "v1" });
+            options.AddSecurity();
+            options.AddLowercaseDocumentFilter();
         });
 
         services.AddEnableRequestBuffering();

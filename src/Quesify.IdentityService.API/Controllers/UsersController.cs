@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Quesify.IdentityService.API.IntegrationEvents.Events;
 using Quesify.IdentityService.API.Mappers;
 using Quesify.IdentityService.API.Models;
 using Quesify.IdentityService.Core.Entities;
 using Quesify.SharedKernel.AspNetCore.Controllers;
 using Quesify.SharedKernel.AspNetCore.Filters;
-using Quesify.SharedKernel.Security.Tokens;
+using Quesify.SharedKernel.EventBus.Abstractions;
+using Quesify.SharedKernel.Guids;
 using Quesify.SharedKernel.Security.Users;
 using Quesify.SharedKernel.Utilities.Exceptions;
 using Quesify.SharedKernel.Utilities.TimeProviders;
@@ -19,18 +21,24 @@ public class UsersController : BaseController
     private readonly UserManager<User> _userManager;
     private readonly ICurrentUser _currentUser;
     private readonly IDateTime _dateTime;
+    private readonly IGuidGenerator _guidGenerator;
+    private readonly IEventBus _eventBus;
     private readonly ILogger<UsersController> _logger;
 
     public UsersController(
         UserManager<User> userManager,
         ICurrentUser currentUser,
-        ILogger<UsersController> logger,
-        IDateTime dateTime)
+        IDateTime dateTime,
+        IGuidGenerator guidGenerator,
+        IEventBus eventBus,
+        ILogger<UsersController> logger)
     {
         _userManager = userManager;
         _currentUser = currentUser;
-        _logger = logger;
         _dateTime = dateTime;
+        _guidGenerator = guidGenerator;
+        _eventBus = eventBus;
+        _logger = logger;
     }
 
     [HttpGet("{id}")]
@@ -47,6 +55,7 @@ public class UsersController : BaseController
 
     [HttpPut]
     [Authorize]
+    [Transaction]
     public async Task<IActionResult> UpdateAsync(UserForUpdateRequest request)
     {
         var user = await _userManager.FindByEmailAsync(_currentUser.Email!);
@@ -62,6 +71,10 @@ public class UsersController : BaseController
         {
             throw new BusinessException(errors: updateUserResult);
         }
+
+        await _eventBus.PublishAsync(
+            new UserUpdatedIntegrationEvent(
+                user.Id, user.ProfileImageUrl, _guidGenerator.Generate(), _dateTime.Now));
 
         return OkResponse(data: UserMapper.Map(user, new UserForUpdateResponse()));
     }
