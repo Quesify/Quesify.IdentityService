@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using Quesify.IdentityService.API.IntegrationEvents.EventHandlers;
-using Quesify.SharedKernel.AspNetCore.Swagger.Filters;
 using Quesify.SharedKernel.Utilities.Guards;
 using Serilog;
 using Serilog.Events;
