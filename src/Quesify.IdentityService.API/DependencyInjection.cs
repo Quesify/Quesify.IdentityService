@@ -5,6 +5,7 @@ using Quesify.SharedKernel.AspNetCore.Swagger.Filters;
 using Quesify.SharedKernel.Utilities.Guards;
 using Serilog;
 using Serilog.Events;
+using Steeltoe.Discovery.Client;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -56,6 +57,8 @@ public static class DependencyInjection
 
         services.AddTransient<QuestionVotedIntegrationEventHandler>();
         services.AddTransient<AnswerVotedIntegrationEventHandler>();
+
+        services.AddDiscoveryClient(configuration);
 
         return services;
     }
