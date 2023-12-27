@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Quesify.IdentityService.API.IntegrationEvents.Events;
 using Quesify.IdentityService.API.Models;
 using Quesify.IdentityService.Core.Constants;
 using Quesify.IdentityService.Core.Entities;
+using Quesify.IdentityService.Infrastructure.IntegrationEvents.Events;
 using Quesify.SharedKernel.AspNetCore.Controllers;
 using Quesify.SharedKernel.AspNetCore.Filters;
 using Quesify.SharedKernel.EventBus.Abstractions;

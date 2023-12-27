@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 using Quesify.IdentityService.Core.Constants;
 using Quesify.IdentityService.Core.Entities;
 using Quesify.IdentityService.Infrastructure.Data.Contexts;
+using Quesify.IdentityService.Infrastructure.IntegrationEvents.Events;
+using Quesify.SharedKernel.EventBus.Abstractions;
+using Quesify.SharedKernel.Guids;
 using Quesify.SharedKernel.Utilities.TimeProviders;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -27,19 +30,25 @@ public class IdentityContextInitializer
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly IDateTime _dateTime;
+    private readonly IGuidGenerator _guidGenerator;
+    private readonly IEventBus _eventBus;
 
     public IdentityContextInitializer(
         ILogger<IdentityContextInitializer> logger,
         IdentityContext context,
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
-        IDateTime dateTime)
+        IDateTime dateTime,
+        IGuidGenerator guidGenerator,
+        IEventBus eventBus)
     {
         _logger = logger;
         _context = context;
         _userManager = userManager;
         _roleManager = roleManager;
         _dateTime = dateTime;
+        _guidGenerator = guidGenerator;
+        _eventBus = eventBus;
     }
 
     public async Task InitializeAsync()
@@ -87,9 +96,16 @@ public class IdentityContextInitializer
         {
             var result = await _userManager.CreateAsync(administrator, "Enes123!");
             await _userManager.AddToRolesAsync(administrator, new[] { RoleConstants.Administrator });
-        }
 
-        //TODO: Send event to kafka topic
+            await _eventBus.PublishAsync(
+                new UserCreatedIntegrationEvent(
+                    administrator.Id,
+                    administrator.UserName,
+                    _guidGenerator.Generate(),
+                    _dateTime.Now
+                )
+            );
+        }
     }
 
     private async Task CreateRoleAsync(Role role)

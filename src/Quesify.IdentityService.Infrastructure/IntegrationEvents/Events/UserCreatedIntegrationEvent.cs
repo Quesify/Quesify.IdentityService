@@ -1,6 +1,6 @@
 ﻿using Quesify.EventBus.Events;
 
-namespace Quesify.IdentityService.API.IntegrationEvents.Events;
+namespace Quesify.IdentityService.Infrastructure.IntegrationEvents.Events;
 
 public class UserCreatedIntegrationEvent : IntegrationEvent
 {

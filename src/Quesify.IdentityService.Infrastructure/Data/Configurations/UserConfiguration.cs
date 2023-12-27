@@ -15,7 +15,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(p => p.NormalizedUserName).HasMaxLength(UserConstants.MaxUserNameLength).IsRequired();
         builder.Property(p => p.Email).IsRequired();
         builder.Property(p => p.NormalizedEmail).IsRequired();
-        builder.Property(p => p.Score).HasDefaultValue(0).IsRequired();
+        builder.Property(p => p.Score).IsRequired();
         builder.Property(p => p.Location).HasMaxLength(UserConstants.MaxLocationLength);
         builder.Property(p => p.BirthDate).HasColumnType("datetime");
         builder.Property(p => p.WebSiteUrl).HasMaxLength(UserConstants.MaxWebSiteUrlLength);
