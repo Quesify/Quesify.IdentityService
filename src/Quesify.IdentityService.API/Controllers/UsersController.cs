@@ -14,7 +14,7 @@ using Quesify.SharedKernel.Utilities.TimeProviders;
 
 namespace Quesify.IdentityService.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 [ApiController]
 public class UsersController : BaseController
 {

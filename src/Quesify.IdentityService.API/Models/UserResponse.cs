@@ -2,6 +2,8 @@
 
 public class UserResponse
 {
+    public Guid Id { get; set; }
+
     public string UserName { get; set; }
 
     public int Score { get; set; }
@@ -15,6 +17,8 @@ public class UserResponse
     public string? WebSiteUrl { get; set; }
 
     public string? ProfileImageUrl { get; set; }
+
+    public DateTime CreationDate { get; set; }
 
     public UserResponse()
     {

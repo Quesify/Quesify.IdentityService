@@ -37,7 +37,7 @@ public static class DependencyInjection
         services.AddDefaultIdentity<User>(options =>
         {
             options.User.RequireUniqueEmail = true;
-            options.SignIn.RequireConfirmedEmail = true;
+            options.SignIn.RequireConfirmedEmail = false;
             options.Password.RequiredLength = 8;
             options.Password.RequireLowercase = true;
             options.Password.RequireUppercase = true;

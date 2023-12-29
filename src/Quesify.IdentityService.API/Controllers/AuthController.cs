@@ -101,15 +101,6 @@ public class AuthController : BaseController
 
         _logger.LogInformation("User {Email} created a new account with password.", request.Email);
 
-        if (_userManager.Options.SignIn.RequireConfirmedEmail)
-        {
-            var userId = await _userManager.GetUserIdAsync(user);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = $"localhost:6000/users/confirm-email/{userId}/{code}";
-            //TODO: Send mail
-        }
-
         await _eventBus.PublishAsync(
             new UserCreatedIntegrationEvent(
                 user.Id, user.UserName, _guidGenerator.Generate(), _dateTime.Now));

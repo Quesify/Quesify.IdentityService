@@ -7,6 +7,7 @@ public class UserMapper
 {
     public static UserResponse Map(User user, UserResponse response)
     {
+        response.Id = user.Id;
         response.UserName = user.UserName!;
         response.Score = user.Score;
         response.About = user.About;
@@ -14,6 +15,7 @@ public class UserMapper
         response.BirthDate = user.BirthDate;
         response.WebSiteUrl = user.WebSiteUrl;
         response.ProfileImageUrl = user.ProfileImageUrl;
+        response.CreationDate = user.CreationDate;
         return response;
     }
 
